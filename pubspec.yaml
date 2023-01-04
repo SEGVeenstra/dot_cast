@@ -1,6 +1,8 @@
 name: dot_cast
-description: An easy and smart way to type cast your objects.
-version: 1.0.0
+description: > 
+  This package provides the user with extension methods for casting objects allowing
+  you to write less and cleaner code.
+version: 1.0.1
 repository: https://github.com/SEGVeenstra/dot_cast
 
 environment:
