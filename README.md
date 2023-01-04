@@ -1,5 +1,5 @@
 
-This package allows you to cast your Objects in a more convinient way.
+This package allows you to cast your Objects in a more convenient way.
 
 ## Features
 
