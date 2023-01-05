@@ -5,6 +5,42 @@ void main() {
   test(
     'cast',
     () {
+      final json = {
+        'string': 'String',
+        'int': 1234,
+      };
+
+      final string = cast<String>(json['string']);
+      final number = cast<int>(json['int']);
+
+      expect(string, 'String');
+      expect(number, 1234);
+    },
+  );
+
+  test(
+    'tryCast',
+    () {
+      final json = {
+        'string': 'String',
+        'int': 1234,
+      };
+
+      final string = tryCast<String>(json['string']);
+      final number = tryCast<int>(json['int']);
+      final notAstring = tryCast<int>(json['string']);
+      final notAnumber = tryCast<String>(json['int']);
+
+      expect(string, 'String');
+      expect(number, 1234);
+      expect(notAnumber, null);
+      expect(notAstring, null);
+    },
+  );
+
+  test(
+    'cast extension',
+    () {
       final vehicles = <_Vehicle>[
         _Car(),
         _Plane(),
@@ -19,7 +55,7 @@ void main() {
   );
 
   test(
-    'tryCast',
+    'tryCast extension',
     () {
       final vehicles = <_Vehicle>[
         _Car(),
