@@ -2,7 +2,7 @@ name: dot_cast
 description: > 
   This package provides the user with extension methods for casting objects allowing
   you to write less and cleaner code.
-version: 1.0.1
+version: 1.1.0
 repository: https://github.com/SEGVeenstra/dot_cast
 
 environment:
