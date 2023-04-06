@@ -1,20 +1,25 @@
+[![codecov](https://codecov.io/gh/SEGVeenstra/dot_cast/branch/main/graph/badge.svg?token=9N8K5J2SNY)](https://codecov.io/gh/SEGVeenstra/dot_cast)
 
-This package allows you to cast your Objects in a more convenient way.
+This package allows you to cast and check your Objects in a more convenient way.
 
 ## Features
 
-This package contains functions and extensions for casting objects.
+This package contains functions and extensions for casting and checking objects.
 
 ### Functions
 
-The functions are just another way of casting objects which might make it a bit
-more readable and usable.
+The functions are just another way of casting and checking objects which might make
+it a bit more readable and usable.
+
+#### cast
 
 With `cast` you can force a cast. It will throw an error if the cast fails.
 
 ```dart
 Car car = cast<Car>(vehicle); // vehicle as Car
 ```
+
+#### tryCast
 
 If you are not sure if the cast will be valid, you can use `tryCast` to receive
 a `null` when the cast fails.
@@ -23,10 +28,28 @@ a `null` when the cast fails.
 Car? car = tryCast<Car>(vehicle); // vehicle is Car ? vehicle as Car : null
 ```
 
+#### isType
+
+You can use `isType` to check wether an `Object` is of a certain type.
+It will return `true` if the `Object` is the same type or a subclass.
+
+```dart
+bool isCar = isType<Car>(vehicle); // vehicle is Car
+```
+
+#### isExactType
+
+You can also use `isExactType` to check wether an `Object` is of a certain type.
+Unlike `isType`, this will only return `true` if the `Object` is exactly the given type.
+
+```dart
+bool isCar = isExactType<Car>(vehicle); // vehicle.runtimeType == Car
+```
+
 ### Extensions
 
-There are two extensions that allow for a more easy way to cast
-objects and continue using them.
+There also are extensions that allow for a more easy way to cast and check
+objects and continue using them in your code.
 
 With `.cast` you can force a cast. You should only do this if you are 100% certain
 that the cast is valid, or else an error is thrown.
@@ -49,4 +72,57 @@ For example when you only need to show items when your state has been loaded, yo
 ```dart
 final items = state.tryCast<Loaded>()?.items;
 ```
+
+Also, both `isType` and `isExactType` have equivalent extensions available.
+
+```dart
+bool isCar = vehicle.isType<Car>(); // vehicle is Car
+
+bool isVehicle = car.isExactType<Vehicle>(); // car.runtimeType == Vehicle
+
+```
+
+## Real World Examples
+
+Below you will find real world examples for the use of this package.
+
+### BlocSelector
+
+I've used the [flutter_bloc](https://pub.dev/packages/flutter_bloc) package for a long time. One of my favorite widgets from that package is the `BlocSelector`.
+
+The `BlocSelector` allows you to rebuild a piece of your UI on a very specific state change. Let's say we want to show the total amount of our shopping basket.
+
+We can only show the amount when the basket has been loaded and there are products available, else we just show 0.
+Without this `dot_cast`, we could write it like this:
+
+```dart
+BlocSelector<BasketBloc, BasketState, double>(
+    selector: (state) {
+        if (state is! BasketLoaded) {
+            return 0.0; // if it has not been loaded, return default
+        } else if (state.products == null) {
+            return 0.0; // if products is null, return default
+        }
+        return state.products?.totalPrice;
+    },
+    builder: (context, state) { // state here is the result of the selector
+        return Text('Total: ${state.formatAsPrice()}');
+    }
+)
+```
+
+With `dot_cast`, we can turn it into the following:
+
+```dart
+BlocSelector<BasketBloc, BasketState, double>(
+    selector: (state) => state.tryCast<BasketLoaded>()?.products?.totalPrice ?? 0.0,
+    builder: (context, state) { // state here is the result of the selector
+        return Text('Total: ${state.formatAsPrice()}');
+    }
+)
+```
+
+Hopefully this gives you an idea on how this package can help you.
+
+Other state management packages like [flutter_redux](https://pub.dev/packages/flutter_redux) and my own [etos_flutter](https://pub.dev/packages/etos_flutter) use the same concepts to allow for specific rebuilds.
 
