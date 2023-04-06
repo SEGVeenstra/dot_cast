@@ -10,4 +10,14 @@ extension ObjectExt on Object {
   ///
   /// When the [Object] is not of type [T], [null] is returned.
   T? tryCast<T extends Object>() => this is T ? this as T : null;
+
+  /// Checks if the [Object] is of the given type [T]
+  ///
+  /// Returns true when the [Object] is the same type or a subclass of [T]
+  bool isType<T extends Object>() => this is T;
+
+  /// Checks if the [Object] is of the given type [T]
+  ///
+  /// Returns true when the [Object] is exactly the same type as [T]
+  bool isExactType<T extends Object>() => runtimeType == T;
 }

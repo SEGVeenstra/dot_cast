@@ -39,6 +39,20 @@ void main() {
   );
 
   test(
+    'isType / isExactType',
+    () {
+      final car = _Car();
+      final vehicle = _Vehicle();
+
+      expect(isType<_Car>(car), true);
+      expect(isType<_Vehicle>(car), true);
+      expect(isExactType<_Car>(car), true);
+      expect(isExactType<_Vehicle>(car), false);
+      expect(isExactType<_Vehicle>(vehicle), true);
+    },
+  );
+
+  test(
     'cast extension',
     () {
       final vehicles = <_Vehicle>[
@@ -71,6 +85,30 @@ void main() {
       expect(planeNull, null);
       expect(car?.drive(), isTrue);
       expect(plane?.fly(), isTrue);
+    },
+  );
+
+  test(
+    'isType/isExactType extension',
+    () {
+      final vehicles = <_Vehicle>[
+        _Car(),
+        _Plane(),
+      ];
+
+      expect(vehicles[0].isType<_Vehicle>(), true);
+      expect(vehicles[0].isType<_Plane>(), false);
+      expect(vehicles[0].isType<_Car>(), true);
+      expect(vehicles[1].isType<_Vehicle>(), true);
+      expect(vehicles[1].isType<_Plane>(), true);
+      expect(vehicles[1].isType<_Car>(), false);
+
+      expect(vehicles[0].isExactType<_Vehicle>(), false);
+      expect(vehicles[0].isExactType<_Plane>(), false);
+      expect(vehicles[0].isExactType<_Car>(), true);
+      expect(vehicles[1].isExactType<_Vehicle>(), false);
+      expect(vehicles[1].isExactType<_Plane>(), true);
+      expect(vehicles[1].isExactType<_Car>(), false);
     },
   );
 }
