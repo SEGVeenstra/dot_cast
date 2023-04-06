@@ -93,35 +93,52 @@ I've used the [flutter_bloc](https://pub.dev/packages/flutter_bloc) package for 
 The `BlocSelector` allows you to rebuild a piece of your UI on a very specific state change. Let's say we want to show the total amount of our shopping basket.
 
 We can only show the amount when the basket has been loaded and there are products available, else we just show 0.
-Without this `dot_cast`, we could write it like this:
+Without `dot_cast`, we could write it like this:
 
 ```dart
 BlocSelector<BasketBloc, BasketState, double>(
     selector: (state) {
         if (state is! BasketLoaded) {
             return 0.0; // if it has not been loaded, return default
-        } else if (state.products == null) {
+        }
+        final products = state.product; // We can now get the products
+        if (products == null) { 
             return 0.0; // if products is null, return default
         }
-        return state.products?.totalPrice;
+        // Here products has been promoted to be a non-nullable object
+        return products.totalPrice; 
     },
-    builder: (context, state) { // state here is the result of the selector
-        return Text('Total: ${state.formatAsPrice()}');
+    builder: (context, state) {
+        // Build the widget
     }
 )
 ```
 
-With `dot_cast`, we can turn it into the following:
+Or as a single expression:
+
+```dart
+BlocSelector<BasketBloc, BasketState, double>(
+    selector: (state) => state is BasketLoaded ? state.products?.totalPrice ?? 0.0 : 0.0,
+    builder: (context, state) {
+        // Build the widget
+    }
+)
+```
+
+I personally think combining all the different syntaxes makes the code look kind of messy. We have a test operator (`is`), the conditional operator (`test ? true : false`), null-check (`?`) and the if-null operator (`??`), all in one line. 
+
+With `dot_cast`, we can turn remove half of those. The result looks like this:
 
 ```dart
 BlocSelector<BasketBloc, BasketState, double>(
     selector: (state) => state.tryCast<BasketLoaded>()?.products?.totalPrice ?? 0.0,
-    builder: (context, state) { // state here is the result of the selector
-        return Text('Total: ${state.formatAsPrice()}');
+    builder: (context, state) {
+        // Build the widget
     }
 )
 ```
 
+In this last example we are able to write a single, readable, line
 Hopefully this gives you an idea on how this package can help you.
 
 Other state management packages like [flutter_redux](https://pub.dev/packages/flutter_redux) and my own [etos_flutter](https://pub.dev/packages/etos_flutter) use the same concepts to allow for specific rebuilds.
