@@ -22,6 +22,16 @@ void main() {
   final noString = tryCast<String>(json['int']); // null
   final noNumber = tryCast<int>(json['string']); // null
 
+  // isType
+
+  final isString = isType<String>(json['string']); // true
+  final isNotString = isType<String>(json['int']); // false
+
+  // isExactType
+
+  final isIntList = isExactType<List<int>>(json['intList']); // true
+  final islist = isExactType<List>(json['intList']); // false
+
   //==========================
   // Cast extensions examples
   //==========================
@@ -41,6 +51,16 @@ void main() {
   nullableCar?.drive();
 
   final nullablePlane = vehicle.tryCast<Plane>(); // null
+
+  // isType extension
+  final vehicles = [Car(), Plane()];
+
+  final isListOfVehicles = vehicles.isType<List<Vehicle>>(); // true
+  final isGenericList = vehicles.isType<List>(); // true
+
+  // isExactType extension
+  final isExactListOfVehicles = vehicles.isExactType<List<Vehicle>>(); // true
+  final isExactGenericList = vehicles.isType<List>(); // false
 }
 
 class Vehicle {}

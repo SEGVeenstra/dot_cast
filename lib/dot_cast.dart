@@ -3,3 +3,4 @@ library dot_cast;
 
 export 'src/cast.dart';
 export 'src/object_ext.dart';
+export 'src/type.dart';
