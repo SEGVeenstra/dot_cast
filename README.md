@@ -138,7 +138,7 @@ BlocSelector<BasketBloc, BasketState, double>(
 )
 ```
 
-In this last example we are able to write a single, readable, line
+In this last example we are able to write a single, readable, line.
 Hopefully this gives you an idea on how this package can help you.
 
 Other state management packages like [flutter_redux](https://pub.dev/packages/flutter_redux) and my own [etos_flutter](https://pub.dev/packages/etos_flutter) use the same concepts to allow for specific rebuilds.
