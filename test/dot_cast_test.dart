@@ -109,6 +109,11 @@ void main() {
       expect(vehicles[1].isExactType<_Vehicle>(), false);
       expect(vehicles[1].isExactType<_Plane>(), true);
       expect(vehicles[1].isExactType<_Car>(), false);
+
+      expect(vehicles.isType<List>(), true);
+      expect(vehicles.isType<List<_Vehicle>>(), true);
+      expect(vehicles.isExactType<List>(), false);
+      expect(vehicles.isExactType<List<_Vehicle>>(), true);
     },
   );
 }

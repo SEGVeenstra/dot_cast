@@ -1,4 +1,3 @@
+bool isType<T>(Object? object) => object is T;
 
-bool isType<T>(Object object) => object is T;
-
-bool isExactType<T>(Object object) => object.runtimeType == T;
+bool isExactType<T>(Object? object) => object.runtimeType == T;
